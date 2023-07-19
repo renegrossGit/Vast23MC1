@@ -4,7 +4,7 @@ var counter = 0;
 // Define configuration for NeoVis
 const neoVisConfig = {
     server: {
-      url: 'bolt+s://23a407ee6480ff301a191f9119d7d9bc.neo4jsandbox.com:7687',  //"bolt://localhost:7687",  //neo4j+s://23a407ee6480ff301a191f9119d7d9bc.neo4jsandbox.com:7687
+      url: 'bolt://44.195.90.130:7687',  //"bolt://localhost:7687",  //neo4j+s://23a407ee6480ff301a191f9119d7d9bc.neo4jsandbox.com:7687
     },
     authentication: {
       user: "neo4j",
@@ -31,10 +31,16 @@ const neoVisConfig = {
     const config = {
       containerId: "viz",
       neo4j: {
+        encrypted:"ENCRYPTION_ON",
+        trust: "TRUST_SYSTEM_CA_SIGNED_CERTIFICATES",
         serverUrl: neoVisConfig.server.url,
         serverUser: neoVisConfig.authentication.user,
         serverPassword: neoVisConfig.authentication.password,
-        secure: true,
+/*         driverConfig: { 
+          encrypted: "ENCRYPTION_ON",
+          trust: "TRUST_SYSTEM_CA_SIGNED_CERTIFICATES"
+          } ,
+ */        secure: true,
       },
 
       visConfig: {
