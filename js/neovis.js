@@ -31,16 +31,16 @@ const neoVisConfig = {
     const config = {
       containerId: "viz",
       neo4j: {
-        encrypted:"ENCRYPTION_ON",
-        trust: "TRUST_SYSTEM_CA_SIGNED_CERTIFICATES",
+//        encrypted:"ENCRYPTION_ON",
+//        trust: "TRUST_SYSTEM_CA_SIGNED_CERTIFICATES",
         serverUrl: neoVisConfig.server.url,
         serverUser: neoVisConfig.authentication.user,
         serverPassword: neoVisConfig.authentication.password,
-/*         driverConfig: { 
-          encrypted: "ENCRYPTION_ON",
+        driverConfig: { 
+          encrypted: "ENCRYPTION_OFF",
           trust: "TRUST_SYSTEM_CA_SIGNED_CERTIFICATES"
           } ,
- */        secure: true,
+         //secure: true,
       },
 
       visConfig: {
