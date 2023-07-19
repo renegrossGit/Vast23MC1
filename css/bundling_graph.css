@@ -1,0 +1,73 @@
+svg {
+    font: 10px sans-serif;
+  }
+
+  .link {
+    fill: none;
+    stroke: #999;
+    stroke-opacity: 0.6;
+  }
+
+  .node {
+    fill: steelblue;
+    stroke: #fff;
+    stroke-width: 1.5px;
+  }
+
+  .arc {
+    fill: blue;
+    stroke: blue;
+  }
+
+  .arcLabel {
+    font-size: 12px;
+    fill: black;
+  }
+.node {
+    font: 300 11px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    fill: #fff;
+  }
+  
+  .arcLabel {
+    font: 300 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+    fill: #fff;
+  }
+  
+  .node:hover {
+    fill: #000;
+  }
+  
+  .link {
+    stroke: steelblue;
+    stroke-opacity: 0.4;
+    fill: none;
+    pointer-events: none;
+  }
+  
+  .node:hover,
+  .node--source,
+  .node--target {
+    font-weight: 700;
+  }
+  
+  .node--source {
+    fill: #2ca02c;
+  }
+  
+  .node--target {
+    fill: #d62728;
+  }
+  
+  .link--source,
+  .link--target {
+    stroke-opacity: 1;
+    stroke-width: 2px;
+  }
+  
+  .link--source {
+    stroke: #d62728;
+  }
+  
+  .link--target {
+    stroke: #2ca02c;
+  }

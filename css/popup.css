@@ -1,0 +1,118 @@
+/* Popup container - can be anything you want */
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  .popup .popuptext {
+    visibility: hidden;
+    width: 800px;
+    background-color: #555;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 16px;
+    position: absolute;
+    z-index: 1;
+    top: 100%; /* Platzierung über dem Elternelement */
+    left: -1200%; /* Zentrierung relativ zum Elternelement */
+    transform: translateX(-50%); /* Zentrierung relativ zum Elternelement */
+  }
+
+  .popup .nodeAnalysistext {
+    visibility: hidden;
+    width: 1000px;
+    background-color: #92A8D1;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 16px;
+    position: absolute;
+    z-index: 1;
+    top: 200%; /* Platzierung über dem Elternelement */
+    left: -100%; /* Zentrierung relativ zum Elternelement */
+    transform: translateX(-50%); /* Zentrierung relativ zum Elternelement */
+  }
+
+  .popup .graphtext {
+    visibility: hidden;
+    width: 800px;
+    background-color: #555;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 16px;
+    position: absolute;
+    z-index: 1;
+    top: 100%; /* Platzierung über dem Elternelement */
+    left: 1200%; /* Zentrierung relativ zum Elternelement */
+    transform: translateX(-50%); /* Zentrierung relativ zum Elternelement */
+  }
+
+  .popup .barcharttext {
+    visibility: hidden;
+    width: 285px;
+    background-color: #555;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 8px;
+    position: absolute;
+    z-index: 1;
+    top: 90%; /* Platzierung über dem Elternelement */
+    left: -100%; /* Zentrierung relativ zum Elternelement */
+    transform: translateX(-50%); /* Zentrierung relativ zum Elternelement */
+  }
+
+  .popup .graphbuildertext {
+    visibility: hidden;
+    width: 800px;
+    background-color: #555;
+    color: #fff;
+    text-align: left;
+    border-radius: 6px;
+    padding: 16px; /* Add spacing here (e.g., 16px) */
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: -1100%;
+    transform: translateX(-50%);
+}
+
+ 
+  /* Popup arrow */
+  .popup .popuptext::after {
+    content: "";
+    position: top;
+    top: 500%;
+    left: 200%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+  
+
+
+  /* Toggle this class - hide and show the popup */
+  .popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+  }
+  
+  /* Add animation (fade in the popup) */
+  @-webkit-keyframes fadeIn {
+    from {opacity: 0;} 
+    to {opacity: 1;}
+  }
+  
+  @keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+  }
