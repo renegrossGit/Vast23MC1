@@ -1,0 +1,306 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<title>FishEye Contextualizer</title>
+
+	<!-- CSS -->
+	<link rel="stylesheet" href="css/index.css">
+	<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link href="css/dashboard.css" rel="stylesheet">
+	<link href="css/bundling_graph.css" rel="stylesheet">
+	<link href="css/popup.css" rel="stylesheet">
+	<!-- JavaScript -->
+	<script type="text/javascript" src="neovis/dist/neovis.js"></script>
+	<script src="https://d3js.org/d3.v6.js"></script>
+	<script src="lib/jquery-3.7.0.min.js"></script>
+	<script type="text/javascript" src="js/bundling_graph.js"></script>
+</head>
+
+<body onload="draw()">
+
+	<!-- Graph Builder -->
+	<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+		<a class="navbar-brand col-sm-3 col-md-2 mr-0 text-center" href="javascript:location.reload()" title="Refresh">
+			<img src="image/fisheye_icon2.png" alt="FishEye" style="width: 140px; height: 40px;">
+			<button type="button" class="btn btn-outline-secondary btn-sm">
+				<svg width="16" height="16" fill="currentColor" class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+					<path
+						d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z">
+					</path>
+					<path fill-rule="evenodd"
+						d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z">
+					</path>
+				</svg>
+			</button>
+		</a>
+
+		<input class="form-control form-control-dark w-100 btn-outline-secondary" id="source" list="sourceList"
+			type="text" placeholder="979893388" aria-label="Search Source Node" title="Search Source Node">
+		<datalist id="sourceList">
+			<option value='Mar de la Vida OJSC'>
+			<option value='979893388'>
+			<option value='Oceanfront Oasis Inc Carriers'>
+			<option value='8327'>
+		</datalist>
+		<button class="btn-outline-secondary" id="analysisNode" title="Start Node Analysis">Start Analysis</button>
+		<!-- 		<input class="form-control form-control-dark w-100" id="target" list="targetList" type="text" placeholder="Search Target Node" aria-label="Search Target Node">
+		<input class="form-control form-control-dark w-100" id="relation" list="relationList" type="text" placeholder="Relation" aria-label="Relation"> -->
+		<input class="form-control form-control-dark w-100 btn-outline-secondary" id="target" list="targetList"
+			type="text" placeholder="All Suspicious Nodes" aria-label="All Suspicious Nodes" title="Search Target Node">
+		<datalist id="targetList">
+			<option value="All Suspicious Nodes"></option>
+			<option value="58623386"></option>
+			<option value="Supreme GmbH & Co. KG Consulting"></option>
+			<option value="Yu gan BV Investment"></option>
+			<option value="Logistics"></option>
+			<option value="Welding"></option>
+			<option value="Federated"></option>
+			<option value="83"></option>
+			<option value="Oceanfront Oasis Inc Carriers"></option>
+			<option value="Officer Pleads Guilty"></option>
+			<option value="Congo Rapids  Marine sanctuary GmbH & Co. KG Marine sanctuary"></option>
+			<option value="Seabreeze Foods Ltd. Corporation United"></option>
+			<option value="80 Percent Arms"></option>
+			<option value="Genev"></option>
+			<option value="Conduct Joint"></option>
+			<option value="Tamil Nadu Ltd. Liability Co Express"></option>
+			<option value="C Express"></option>
+			<option value="Turkish Sword Ltd Export"></option>
+			<option value="48"></option>
+			<option value="Mitsubishi"></option>
+			<option value="Mar de la Vida OJSC"></option>
+			<option value="8814"></option>
+			<option value="Lake Mweru A/S Carriers"></option>
+		</datalist>
+
+		<input class="form-control form-control-dark w-100 btn-outline-secondary" id="relation" list="relationList"
+			type="text" placeholder=":ownership|partnership" aria-label=":ownership|partnership"
+			title="Select Relation">
+		<datalist id="relationList">
+			<option value=':ownership'></option>
+			<option value=':partnership'></option>
+			<option value=':family_relationship'></option>
+			<option value=':membership'></option>
+			<option value=':ownership|partnership'></option>
+			<option value=':ownership|partnership|family_relationship'></option>
+			<option value=':ownership|partnership|family_relationship|membership'>
+		</datalist>
+
+		<input class="form-control form-control-dark w-100 btn-outline-secondary" id="direction" list="directionList"
+			type="text" placeholder="source-target" aria-label="source-target" title="Select Direction">
+		<datalist id="directionList">
+			<option value="source-target"></option>
+			<option value="target-source"></option>
+		</datalist>
+
+		<input class="navbar-brand btn-outline-secondary" type="number" id="pathlength" name="quantity" min="1" max="5"
+			value="1" title="Pathlength">
+		<button class="navbar-brand btn-outline-secondary" id="drawNewButton" title="Create new Graph">Draw New</button>
+		<button class="navbar-brand btn-outline-secondary" id="updateButton"
+		title="Update the Graph with the fetched Nodes">Update</button>
+		
+		<div class="popup " onclick="popupGraphbuilder()" style="margin-right: 10px;">
+			<svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
+				class="bi bi-question-square-fill btn-outline-secondary" viewBox="0 0 16 16">
+				<path
+					d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.496 6.033a.237.237 0 0 1-.24-.247C5.35 4.091 6.737 3.5 8.005 3.5c1.396 0 2.672.73 2.672 2.24 0 1.08-.635 1.594-1.244 2.057-.737.559-1.01.768-1.01 1.486v.105a.25.25 0 0 1-.25.25h-.81a.25.25 0 0 1-.25-.246l-.004-.217c-.038-.927.495-1.498 1.168-1.987.59-.444.965-.736.965-1.371 0-.825-.628-1.168-1.314-1.168-.803 0-1.253.478-1.342 1.134-.018.137-.128.25-.266.25h-.825zm2.325 6.443c-.584 0-1.009-.394-1.009-.927 0-.552.425-.94 1.01-.94.609 0 1.028.388 1.028.94 0 .533-.42.927-1.029.927z">
+				</path>
+			</svg>
+			<span class="graphbuildertext" id="graphbuilderPopup">
+				The <strong> Graph Builder </strong>allows you to specify specific paths that will be searched for in the main graph.
+				These paths represent connections between nodes that are related to known illegal fishing companies or organizations.
+				By defining these paths, you can fetch and create subgraphs that focus on the relevant connections and provide insights into the involvement of different nodes with illegal fishing activities.
+				<ul>
+					<li><strong>Source Node:</strong> The node to be investigated in the main graph.</li>
+					<li><strong>Target Node:</strong> The specified illegal fishing companies or organizations.</li>
+					<li><strong>Relationship:</strong> The type of connection between the source and target nodes.</li>
+					<li><strong>Direction:</strong> Specifies the direction in which the paths run.</li>
+					<li><strong>Path Length:</strong> Limits the allowed maximum path length.</li>
+					<li><strong>Draw New:</strong> Draws a new subgraph with the specified settings.</li>
+					<li><strong>Update:</strong> Adds the new paths to the already generated subgraph.</li>
+				</ul>
+			</span>
+			
+		</div>
+	</nav>
+
+
+	<div class="container-fluid">
+		<div class="row">
+			<!-- Barchart -->
+			<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+				<div class="sidebar-sticky mt-1 pt-3 pb-1">
+					<div class="border-bottom" style="display: flex; align-items: center;">
+						<!-- Barchart -->
+						<div>
+							Node Description
+						</div>
+						<div class="popup" onclick="popupBarchart()" style="margin-left: 10px;">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+								class="bi bi-question-circle btn-outline-secondary" viewBox="0 0 16 16">
+								<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+								<path
+									d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z" />
+							</svg>
+							<span class="barcharttext" id="barchartPopup">
+								<strong> Node Description </strong> is a degree analysis that shows the individual relationships to neighboring nodes without expanding the subgraph, 
+								keeping it clear and organized. 
+								The different values are divided into two groups: 
+								<ul>
+									<li>the types of relationships (e.g., Ownership, Partnership, etc.)</li>
+									<li>and the types of nodes (e.g., Company, Vessel, Location, etc.).</li>
+								</ul>
+								The suffixes "_in" and "_out" refer to the direction of the relationships, indicating whether they are inbound or outbound.
+
+							</span>
+						</div>
+					</div>
+					<div id="barchart-container"></div>
+				</div>
+			</nav>
+			
+
+			<!-- Graph Vis and Heatmap -->
+			<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-0 pb-0">
+				<div
+					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-0 mt-1 border-bottom">
+					<div class="col-md-8">
+						<div style="display: flex; align-items: center;">
+							<div>Illegal Fishing Connection</div>
+							<div class="popup" onclick="myFunction()" style="margin-left: 10px;">
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+									class="bi bi-question-circle btn-outline-secondary" viewBox="0 0 16 16">
+									<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+									<path
+										d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z" />
+								</svg>
+								<span class="graphtext" id="myPopup">
+									The <strong>Graph Visualization</strong>  is a part of the Main Graph and is created based on the defined paths in the Graph Builder. 
+									It includes various types of nodes, such as: <br>
+									<ul>
+										<li><span style="color: #e3a21a;">person</span></li>
+										<li><span style="color: #00a300;">organization</span></li>
+										<li><span style="color: #b91d47;">company</span></li>
+										<li><span style="color: #99b433;">political_organization</span></li>
+										<li><span style="color: #1d1d1d;">location</span></li>
+										<li><span style="color: #603cba;">vessel</span></li>
+										<li><span style="color: #ffc40d;">event</span></li>
+										<li><span style="color: #00aba9;">movement</span></li>
+										<li><span style="color: #eff4ff;">unknown</span></li>
+									</ul> 
+									Additionally, there are special types of nodes: 
+									<span style="color: #2d89ef;">Sourcenodes</span>, 
+									<span style="color: #ee1111;">Targetnodes</span>, and 
+									<span style="color: #76AAE5;">Selectednode</span>.
+									<br>
+									The relationships between nodes are represented by different edge types, including <strong>membership, partnership, ownership, and family_relationship.</strong> 
+									The color of the relationship is determined by the origin node.
+									<br>
+									<strong> Functionality:</strong>
+									<ul>
+										<li><strong>Zoom:</strong> Labels disappear when zooming out to provide a clear view of the graph.</li>
+										<li><strong>Node Dragging:</strong> Helps to adjust the layout and avoid overlapping nodes.</li>
+										<li><strong>Node Click:</strong> Generates a Barchart for the selected node and highlights the selected node it in the Heatmap.</li>
+										<li><strong>Double Click:</strong> Expands the selected node, showing its neighboring nodes.</li>
+									</ul>
+								  </span>
+								</div>
+								
+								<div id="counterContainer" class="counter-container"></div>
+
+								<div class="popup btn-outline-secondary" onclick="popupNodeCountAnalysis()" style="margin-left: 80px;"> Analysis Result
+									<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bar-chart-fill" viewBox="0 0 16 16">
+										<path d="M1 11a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-3zm5-4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V2z"/>
+									  </svg>
+									<span class="nodeAnalysistext" id="NodeAnalysisPopup">
+										<div id="stackedGraph"></div>
+									  </span>
+									</div>
+
+							</div>
+					</div>
+					<div class="col-md-4" style="display: flex; align-items: center;">
+						<div>Graph Overview</div>
+						<div class="popup" onclick="popupHeatmap()" style="margin-left: 10px;">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+								class="bi bi-question-circle btn-outline-secondary" viewBox="0 0 16 16">
+								<path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+								<path
+									d="M5.255 5.786a.237.237 0 0 0 .241.247h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286zm1.557 5.763c0 .533.425.927 1.01.927.609 0 1.028-.394 1.028-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94z" />
+							</svg>
+							<div class="popuptext" id="heatmapPopup">
+								<p>
+									Feature Description:
+								</p>
+								<ul>
+									<li><strong>Suspicious:</strong> These are nodes associated with illegal fishing, as marked by FishEye International.</li>
+									<li><strong>Centrality:</strong> This feature is determined by the number of connections (edges) that a node possesses. Nodes with a high degree of centrality are considered important because they have more direct connections to other nodes. In our heatmap, we invert this score to align it with other metrics, where a higher centrality score indicates a lower probability that the node represents a suspicious company.</li>
+									<li><strong>Remoteness:</strong> This measure indicates how far each node is from the five largest central nodes. Our assumption is that suspicious companies tend to operate on the periphery or outskirts.</li>
+									<li><strong>Closeness:</strong> This feature is measured by the number of connections (both the number of paths and the length of the path) that each node has, specifically using the 'ownership' type. The closer a node is to a suspicious company in terms of connectivity, the higher the probability that it is also suspicious. However, this logic does not apply to nodes with higher centrality.</li>
+								</ul>
+								<p>
+									Functionality:
+								</p>
+								<ul>
+									<li><strong>Hover:</strong> When hovering over a node, a tooltip displays the exact value of the corresponding feature.</li>
+									<li><strong>Click:</strong> When clicking on a node, it is highlighted and made visible in the main graph, allowing users to explore the connections and relationships associated with that particular node.</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div
+					class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+					<!-- vis.js Graph -->
+					<div id="viz" class="col-md-8"></div>
+					<!-- Heatmap -->
+					<div id="heatmap" class="col-md-4 px-0" style="height: 720px; overflow-y: auto;"> </div>
+				</div>
+				<!-- 			<h2>SubGraph Describtion</h2>
+			<div class="table-responsive">
+				<div id="container"></div>
+			</div> -->
+
+
+			<!-- <div id="my_dataviz"></div> -->
+			</main>
+			
+		</div>
+	</div>
+
+
+	<!-- Menu -->
+	<!-- 	<label for="search">Source:</label>
+	<input type="text" id="source" list="sourceList">
+	<datalist id="sourceList"></datalist>
+
+	<label for="search">Target:</label>
+	<input type="text" id="target" list="targetList">
+	<datalist id="targetList"></datalist>
+
+	<label for="search">Relation:</label>
+	<input type="text" id="relation" list="relationList">
+	<datalist id="relationList"></datalist>
+
+	<button id="FetchSomeNodes">Submit</button>
+	<button id="showAllNodes">showAllNodes</button>
+
+		Cypher query: <textarea rows="5" cols=50 id="cypher"></textarea><br>
+ -->
+
+	<script type="text/javascript" src="js/popup.js"></script>
+	<script type="text/javascript" src="js/queries.js"></script>
+	<script type="text/javascript" src="js/neovis.js"></script>
+	<script type="text/javascript" src="js/graphbuilder.js"></script>
+	<script type="text/javascript" src="js/heatmap.js"></script>
+	<script type="text/javascript" src="js/barchart.js"></script>
+	<script type="text/javascript" src="js/stackedAreaLineGraph.js"></script>
+</body>
+
+</html>

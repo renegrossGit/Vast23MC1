@@ -1,0 +1,290 @@
+<!doctype html>
+<html>
+<head>
+    <title>FishEye Contextualizer</title>
+	<style type="text/css">
+		html, body {
+			font: 16pt arial;
+		}
+		#viz-container {
+			display: flex;
+		}
+		#viz {
+			width: 1400px;
+			height: 1000px;
+			border: 1px solid lightgray;
+			font: 22pt arial;
+		}
+		#selected-nodes {
+			width: 200px;
+			height: 500px;
+			border: 1px solid lightgray;
+			font: 10pt arial;
+			flex-shrink: 0;
+			margin-left: 20px;
+			overflow: auto;
+		}
+		#graph-image {
+			width: 700px;
+			height: 500px;
+			border: 1px solid lightgray;
+		}
+
+		#chart-container {
+			display: flex;
+	    }
+
+		#fisheye-container {
+			width: 1600px;
+			font: 10pt arial;
+			margin-left: 20px;
+			flex-shrink: 0;
+			overflow: auto;
+			display: flex; align-items: center; justify-content: center;
+		}
+
+		#selected-nodes2 {
+			width: 200px;
+			height: 300px;
+			border: 1px solid lightgray;
+			font: 10pt arial;
+			margin-left: 20px;
+			flex-shrink: 0;
+			overflow: auto;
+		}
+    	
+		#chart-1{
+        	width: 700px;
+        	height: 300px;
+        	border: 1px solid lightgray;
+    	}
+		#chart-2 {
+			width: 700px;
+			height: 300px;
+			border: 1px solid lightgray;
+    	}
+
+		#gritEinsEins {
+			width: 200px;
+			border: 1px solid lightgray;
+			font: 10pt arial;
+			margin-left: 20px;
+			flex-shrink: 0;
+			overflow: auto;
+			background-color: rgb(23, 145, 201);
+		}
+    	
+		#gritEinsZwei {
+        	width: 700px;
+        	border: 1px solid lightgray;
+			font: 10pt arial;
+			flex-shrink: 0;
+			overflow: auto;
+			background-color: rgb(23, 145, 201);
+    	}
+		#gritEinsDrei {
+			width: 700px;
+			border: 1px solid lightgray;
+			font: 10pt arial;
+			flex-shrink: 0;
+			overflow: auto;
+			background-color: rgb(23, 145, 201);
+    	}
+	</style>
+
+    <!-- FIXME: load from dist -->
+    <script type="text/javascript" src="../dist/neovis.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Amatic+SC&display=swap');
+	  </style>
+
+
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+            integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+            crossorigin="anonymous"></script>
+
+	<script type="text/javascript" src="neovis.js"></script>
+
+</head>
+<body onload="draw()">
+	Cypher query: <textarea rows="5" cols=50 id="cypher"></textarea><br>
+	<div id="fisheye-container" class="row">
+		<h1 style="font-family: 'Amatic SC', cursive; font-size: 48px; margin-right: 10px;">Fisheye</h1>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="50" height="50">
+		  <circle cx="50" cy="50" r="40" fill="#FFD700" />
+		  <circle cx="60" cy="40" r="10" fill="#DA70D6" />
+		  <circle cx="40" cy="40" r="10" fill="#DA70D6" />
+		  <path d="M45,60 Q50,70 55,60" fill="none" stroke="#DA70D6" stroke-width="2" />
+		</svg>
+	  </div>
+
+	  <div id="chart-container" class="row">
+		<div id="gritEinsEins" class="col-md-1.5">
+			<h2 style="font-family: 'Amatic SC', cursive; font-size: 24px; margin-bottom: 10px; width: 100%;">Initializer</h2>
+		</div>
+		<div class="col-md-5" id="gritEinsZwei">
+			<h2 style="font-family: 'Amatic SC', cursive; font-size: 24px; margin-bottom: 10px; width: 100%;">Local Graph View</h2>
+		</div>
+		<div class="col-md-5" id="gritEinsDrei">
+			<h2 style="font-family: 'Amatic SC', cursive; font-size: 24px; margin-bottom: 10px; width: 100%;">Global Graph View</h2>
+		</div>
+	</div>
+
+    <div id="viz-container" class="row">
+		<div id="selected-nodes" class="col-md-1.5">
+			<ul style="list-style: none; padding: 0; margin-top: 20px;">
+				<li style="margin-bottom: 10px;"><input type="submit" value="Reset/Submit" id="reload"></li>
+				<li style="margin-bottom: 10px;"><input type="submit" value="Stabilize" id="stabilize"></li>
+				<li style="margin-bottom: 10px;"><input type="submit" value="Fetch Some Nodes" id="FetchSomeNodes"></li>
+				<li style="margin-bottom: 10px;"><input type="submit" value="Ownership Graph 1000" id="OwnershipGraph1000"></li>
+				<li style="margin-bottom: 10px;"><input type="submit" value="Ownership Graph Full" id="OwnershipGraphFull"></li>
+				<li style="margin-bottom: 10px;"><input type="submit" value="Mar de la Vida OJSC" id="FirstSuspect"></li>
+				<li style="margin-bottom: 10px;"><input type="submit" value="979893388" id="SecondSuspect"></li>
+				<li style="margin-bottom: 10px;"><input type="submit" value="Oceanfront Oasis Inc Carriers" id="ThirdSuspect"></li>
+				<li style="margin-bottom: 10px;"><input type="submit" value="8327" id="FourthSuspect"></li>
+				<li style="margin-bottom: 10px;"><input type="submit" value="SecondSuspectOwnership" id="SecondSuspectOwnership"></li>
+				<li style="margin-bottom: 10px;"><input type="submit" value="SecondSuspectNotMembership" id="SecondSuspectNotMembership"></li>		  
+			  </ul>
+		</div>
+        <div id="viz" class="col-md-10"></div>
+<!--         <img id="graph-image" src="img/MC1_fullGraph.PNG" alt="Graph Image"class="col-md-5">
+ -->	</div>
+
+	<div id="chart-container" class="row">
+		<div id="gritEinsEins" class="col-md-1.5">
+			<h2 style="font-family: 'Amatic SC', cursive; font-size: 24px; margin-bottom: 10px; width: 100%;">Strategy Selection</h2>
+		</div>
+		<div class="col-md-5" id="gritEinsZwei">
+			<h2 style="font-family: 'Amatic SC', cursive; font-size: 24px; margin-bottom: 10px; width: 100%;">Node Analysis (Local)</h2>
+		</div>
+		<div class="col-md-5" id="gritEinsDrei">
+			<h2 style="font-family: 'Amatic SC', cursive; font-size: 24px; margin-bottom: 10px; width: 100%;">Subnetwork Analysis (Global)</h2>
+		</div>
+	</div>
+
+	<div id="chart-container" class="row">
+		<div id="selected-nodes2" class="col-md-1.5">
+			<ul style="list-style: none; padding: 0; margin-top: 20px;">
+				<li style="margin-bottom: 10px;"><input type="submit" value="Pathfinding" ></li>
+				<li style="margin-bottom: 10px;"><input type="submit" value="Centrality/Importance"></li>
+				<li style="margin-bottom: 10px;"><input type="submit" value="Cummunity Detection" ></li>
+				<li style="margin-bottom: 10px;"><input type="submit" value="Simularity"></li>
+				<li style="margin-bottom: 10px;"><input type="submit" value="Link Prediction"></li>	  
+			  </ul>
+		</div>
+		<div class="col-md-5" id="chart-1">
+			<canvas id="barChartCanvas"></canvas>
+		</div>
+		<div class="col-md-5" id="chart-2">
+			<canvas id="lineChartCanvas"></canvas>
+		</div>
+	</div>
+
+
+
+<!-- <input type="submit" value="Submit" id="reload">
+<input type="submit" value="Stabilize" id="stabilize">
+<input type="submit" value="AddEdges" id="AddEdges">
+ -->
+
+<script>
+// Balkendiagramm
+var barChartCanvas = document.getElementById('barChartCanvas').getContext('2d');
+var barChart = new Chart(barChartCanvas, {
+    type: 'bar',
+    data: {
+        labels: ['Node1', 'Node2', 'Node3', 'Node4'],
+        datasets: [{
+            label: 'Node Anomaly',
+            data: [10, 20, 30, 40],
+            backgroundColor: 'rgba(75, 192, 192, 0.8)'
+        }]
+    },
+    options: {}
+});
+
+// Liniendiagramm
+var lineChartCanvas = document.getElementById('lineChartCanvas').getContext('2d');
+var lineChart = new Chart(lineChartCanvas, {
+    type: 'line',
+    data: {
+        labels: ['First Seq', 'Second Seq', 'Third Seq', 'Fourth Seq', 'Fifth Seq'],
+        datasets: [{
+            label: 'Sequence Analysis',
+            data: [10, 30, 20, 40, 55],
+            borderColor: 'rgba(255, 99, 132, 0.8)',
+            fill: false
+        }]
+    },
+    options: {}
+});
+
+</script>
+
+<script>
+
+	$("#reload").click(function () {
+
+		var cypher = $("#cypher").val();
+		
+		
+
+		if (cypher.length > 3) {
+			viz.renderWithCypher(cypher);
+		} else {
+			console.log("reload");
+			viz.reload();
+			console.log(cypher);
+		}
+
+	});
+
+	$("#stabilize").click(function () {
+		viz.stabilize();
+		
+	})
+
+	$("#FetchSomeNodes").click(function () {
+		viz.updateWithCypher("MATCH (n)-[r]->(m) RETURN n,r,m LIMIT 40");	
+	})
+
+	$("#OwnershipGraph1000").click(function () {
+		viz.updateWithCypher("MATCH (n)-[r]-(m) WHERE r.type = 'ownership' RETURN n, r, m LIMIT 1000");	
+	})
+
+	$("#OwnershipGraphFull").click(function () {
+		viz.updateWithCypher("MATCH (n)-[r]-(m) WHERE r.type = 'ownership' RETURN n, r, m");	
+	})
+
+	$("#FirstSuspect").click(function () {
+		viz.updateWithCypher(`MATCH (referencedNode)-[r]->(relatedNode) WHERE relatedNode.id = "Mar de la Vida OJSC" OR referencedNode.id = "Mar de la Vida OJSC" RETURN referencedNode, r, relatedNode`);		
+	})
+	//MATCH (referencedNode)-[r]->(relatedNode) WHERE relatedNode.id = "FishEye International" OR referencedNode.id = "FishEye International" RETURN referencedNode, r, relatedNode
+	$("#SecondSuspect").click(function () {
+		viz.updateWithCypher(`MATCH (referencedNode)-[r]->(relatedNode) WHERE relatedNode.id = "979893388" OR referencedNode.id = "979893388" RETURN referencedNode, r, relatedNode`);		
+	})
+
+	$("#ThirdSuspect").click(function () {
+		viz.updateWithCypher(`MATCH (referencedNode)-[r]->(relatedNode) WHERE relatedNode.id = "Oceanfront Oasis Inc Carriers" OR referencedNode.id = "Oceanfront Oasis Inc Carriers" RETURN referencedNode, r, relatedNode`);		
+	})
+
+	$("#FourthSuspect").click(function () {
+		viz.updateWithCypher(`MATCH (referencedNode)-[r]->(relatedNode) WHERE relatedNode.id = "8327" OR referencedNode.id = "8327" RETURN referencedNode, r, relatedNode`);		
+	})
+
+	$("#SecondSuspectOwnership").click(function () {
+		viz.updateWithCypher(`MATCH (referencedNode)-[r]->(relatedNode) WHERE (relatedNode.id = "979893388" OR referencedNode.id = "979893388")  AND r.type = 'ownership' RETURN referencedNode, r, relatedNode`);		
+	})
+
+	$("#SecondSuspectNoMembership").click(function () {
+		viz.updateWithCypher(`MATCH (referencedNode)-[r]->(relatedNode) WHERE (relatedNode.id = "979893388" OR referencedNode.id = "979893388")  AND r.type != 'membership' RETURN referencedNode, r, relatedNode`);		
+	})
+
+</script>
+
+</body>
+
+</html>
