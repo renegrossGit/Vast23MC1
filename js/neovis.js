@@ -37,8 +37,8 @@ const neoVisConfig = {
         serverUser: neoVisConfig.authentication.user,
         serverPassword: neoVisConfig.authentication.password,
         driverConfig: { 
-          encrypted: "ENCRYPTION_ON",
-          trust: "TRUST_SYSTEM_CA_SIGNED_CERTIFICATES"
+          //encrypted: "ENCRYPTION_ON",
+          //trust: "TRUST_SYSTEM_CA_SIGNED_CERTIFICATES"
           } ,
          //secure: true,
       },
