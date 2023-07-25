@@ -4,11 +4,11 @@ var counter = 0;
 // Define configuration for NeoVis
 const neoVisConfig = {
     server: {
-      url: 'bolt://44.195.90.130:7687',  //"bolt://localhost:7687",  //neo4j+s://23a407ee6480ff301a191f9119d7d9bc.neo4jsandbox.com:7687
+      url: 'neo4j+s://89b2ab1b.databases.neo4j.io',  //"bolt://localhost:7687",  //neo4j+s://23a407ee6480ff301a191f9119d7d9bc.neo4jsandbox.com:7687
     },
     authentication: {
-      user: "neo4j",
-      password: "headset-license-ore" //"password"  //headset-license-ore
+      user: "Jake",
+      password: "password"  //headset-license-ore
     },
     query: {
       initial: `MATCH path = (referencedNode)-[r]->(relatedNode) WHERE referencedNode.id = "FishEye International" RETURN path`,
@@ -37,7 +37,7 @@ const neoVisConfig = {
         serverUser: neoVisConfig.authentication.user,
         serverPassword: neoVisConfig.authentication.password,
         driverConfig: { 
-          encrypted: "ENCRYPTION_OFF",
+          encrypted: "ENCRYPTION_ON",
           trust: "TRUST_SYSTEM_CA_SIGNED_CERTIFICATES"
           } ,
          //secure: true,
