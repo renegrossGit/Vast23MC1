@@ -4,9 +4,7 @@ var counter = 0;
 // Define configuration for NeoVis
 const neoVisConfig = {
     server: {
-      url: 'neo4j://89b2ab1b.databases.neo4j.io',  //"bolt://localhost:7687",  //neo4j+s://23a407ee6480ff301a191f9119d7d9bc.neo4jsandbox.com:7687
-    },
-    authentication: {
+      url: "neo4j://89b2ab1b.databases.neo4j.io",  //neo4j+s://23a407ee6480ff301a191f9119d7d9bc.neo4jsandbox.com:7687
       user: "Jake",
       password: "password"  //headset-license-ore
     },
@@ -34,12 +32,12 @@ const neoVisConfig = {
 //        encrypted:"ENCRYPTION_ON",
 //        trust: "TRUST_SYSTEM_CA_SIGNED_CERTIFICATES",
         serverUrl: neoVisConfig.server.url,
-        serverUser: neoVisConfig.authentication.user,
-        serverPassword: neoVisConfig.authentication.password,
+        serverUser: neoVisConfig.server.user,
+        serverPassword: neoVisConfig.server.password,
         driverConfig: { 
           encrypted: "ENCRYPTION_ON",
           trust: "TRUST_SYSTEM_CA_SIGNED_CERTIFICATES"
-          } ,
+        } ,
          //secure: true,
       },
 
