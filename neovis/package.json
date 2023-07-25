@@ -76,8 +76,8 @@
   "dependencies": {
     "@babel/runtime-corejs3": "^7.21.5",
     "deepmerge": "^4.3.1",
-    "neo4j-driver": "^5.0.0",
-    "neo4j-driver-core": "^5.0.0",
+    "neo4j-driver": "^3.0.0",
+    "neo4j-driver-core": "^3.0.0",
     "vis-network": "^9.1.6"
   },
   "jest": {
